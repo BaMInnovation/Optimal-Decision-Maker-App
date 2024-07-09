@@ -1,0 +1,19 @@
+
+
+/* Cards.css */
+.cards-container {
+    display: flex;
+    gap: 1rem;
+    background-color: red;
+    padding: 3%;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    padding: 1rem;
+    border-radius: 0.7rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    width: 100px;
+  }
+  
