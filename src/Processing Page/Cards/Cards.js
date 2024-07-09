@@ -8,6 +8,18 @@ function Cards() {
   const [criteriaCards, setCriteriaCards] = useState([{
     criteriaName: "C1",
     dataType: "Numerical"
+  },
+  {
+    criteriaName: "C1",
+    dataType: "Numerical"
+  },
+  {
+    criteriaName: "C1",
+    dataType: "Numerical"
+  },
+  {
+    criteriaName: "C1",
+    dataType: "Numerical"
   }])
 
   return (
