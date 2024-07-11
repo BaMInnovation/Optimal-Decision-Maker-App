@@ -10,7 +10,7 @@ function Cards() {
     dataType: "Categorical",
     categories: [{categoryName: "Cat1", categoryPoint: 15},
                  {categoryName: "Cat2", categoryPoint: 10},
-                 {categoryName: "Cat3", categoryPoint: 35}],
+                 {categoryName: "Cat3", categoryPoint: 375}],
     characteristic: "Beneficial",
     criteriaPoint: 15
   },
