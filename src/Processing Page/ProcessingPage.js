@@ -1,4 +1,4 @@
-import Cards from "./Cards/Cards.js";
+import Cards from "./Criterias/Cards.js";
 
 
 

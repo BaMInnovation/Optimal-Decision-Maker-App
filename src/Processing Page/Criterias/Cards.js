@@ -1,7 +1,7 @@
 
 // Cards.js
 import React from 'react';
-import './Cards.css';
+import './Criterias.css';
 import { useState } from 'react';
 
 function Cards() {
@@ -24,6 +24,9 @@ function Cards() {
   return (
     <div className='criterias'>
       <button type="button" class="btn btn-primary" style={{marginTop:"110px", marginLeft:"10px", marginBottom: "10px"}}>Add Criteria</button>
+
+      
+
       <div className="cards-container">
 
         {criteriaCards.map((card) => {
@@ -39,9 +42,6 @@ function Cards() {
             <p><b>Criteria Point:</b> {card.criteriaPoint}</p>
           </div>
   })}
-        
-        
-        
         
       </div>
     </div>
