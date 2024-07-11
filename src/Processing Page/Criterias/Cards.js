@@ -4,6 +4,7 @@ import React from 'react';
 import './Criterias.css';
 import { useState } from 'react';
 
+
 function Cards() {
   const [criteriaCards, setCriteriaCards] = useState([{
     criteriaName: "C1",
