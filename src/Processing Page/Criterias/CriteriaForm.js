@@ -19,84 +19,86 @@ function CriteriaForm() {
   };
 
   return (
-    <div className="container mt-5">
-      <h2 style={{textAlign:"center"}}>Add New Criteria</h2>
-      <form onSubmit={handleSubmit}>
+    <div className='overlay'>
+      <div className="container mt-5" id='criteria-form'>
+        <h2 style={{textAlign:"center"}}>Add New Criteria</h2>
+        <form onSubmit={handleSubmit}>
 
-        {/* Criteria Name */}
-        <div className="mb-3">   
-          <label htmlFor="criteriaName" className="form-label">Criteria Name</label>
-          <input
-            type="text"
-            className="form-control"
-            id="criteriaName"
-            value={criteriaName}
-            onChange={(e) => setCriteriaName(e.target.value)}
-            required
-          />
-        </div>
-
-        {/* Data type */}   
-        <div className="mb-3">  
-          <label htmlFor="dataType" className="form-label">Data Type</label>
-          <select
-            className="form-select"
-            id="dataType"
-            value={dataType}
-            onChange={(e) => setDataType(e.target.value)}
-            required
-          >
-            <option value="Numerical">Numerical</option>
-            <option value="Categorical">Categorical</option>
-          </select>
-        </div>
-        
-        <div className='row'>
-            <div className="mb-3 col-8">
-                <label className="form-label">Characteristic</label>
-                <div>
-                    <div className="form-check form-check-inline">
-                    <input
-                        className="form-check-input"
-                        type="radio"
-                        name="characteristic"
-                        id="beneficial"
-                        value="Beneficial"
-                        checked={characteristic === 'Beneficial'}
-                        onChange={(e) => setCharacteristic(e.target.value)}
-                    />
-                    <label className="form-check-label" htmlFor="beneficial">Beneficial</label>
-                    </div>
-                    <div className="form-check form-check-inline">
-                    <input
-                        className="form-check-input"
-                        type="radio"
-                        name="characteristic"
-                        id="cost"
-                        value="Cost"
-                        checked={characteristic === 'Cost'}
-                        onChange={(e) => setCharacteristic(e.target.value)}
-                    />
-                    <label className="form-check-label" htmlFor="cost">Cost</label>
-                    </div>
-                </div>
-            </div>
-            <div className="mb-3 col-4">
-            <label htmlFor="criteriaPoint" className="form-label">Criteria Point</label>
+          {/* Criteria Name */}
+          <div className="mb-3">   
+            <label htmlFor="criteriaName" className="form-label">Criteria Name</label>
             <input
-                type="number"
-                className="form-control"
-                id="criteriaPoint"
-                value={criteriaPoint}
-                onChange={(e) => setCriteriaPoint(parseInt(e.target.value))}
-                min="1"
-                required
+              type="text"
+              className="form-control"
+              id="criteriaName"
+              value={criteriaName}
+              onChange={(e) => setCriteriaName(e.target.value)}
+              required
             />
-            </div>
-        </div>
-        
-        <button type="submit" className="btn btn-primary">Add Criteria</button>
-      </form>
+          </div>
+
+          {/* Data type */}   
+          <div className="mb-3">  
+            <label htmlFor="dataType" className="form-label">Data Type</label>
+            <select
+              className="form-select"
+              id="dataType"
+              value={dataType}
+              onChange={(e) => setDataType(e.target.value)}
+              required
+            >
+              <option value="Numerical">Numerical</option>
+              <option value="Categorical">Categorical</option>
+            </select>
+          </div>
+          
+          <div className='row'>
+              <div className="mb-3 col-8">
+                  <label className="form-label">Characteristic</label>
+                  <div>
+                      <div className="form-check form-check-inline">
+                      <input
+                          className="form-check-input"
+                          type="radio"
+                          name="characteristic"
+                          id="beneficial"
+                          value="Beneficial"
+                          checked={characteristic === 'Beneficial'}
+                          onChange={(e) => setCharacteristic(e.target.value)}
+                      />
+                      <label className="form-check-label" htmlFor="beneficial">Beneficial</label>
+                      </div>
+                      <div className="form-check form-check-inline">
+                      <input
+                          className="form-check-input"
+                          type="radio"
+                          name="characteristic"
+                          id="cost"
+                          value="Cost"
+                          checked={characteristic === 'Cost'}
+                          onChange={(e) => setCharacteristic(e.target.value)}
+                      />
+                      <label className="form-check-label" htmlFor="cost">Cost</label>
+                      </div>
+                  </div>
+              </div>
+              <div className="mb-3 col-4">
+              <label htmlFor="criteriaPoint" className="form-label">Criteria Point</label>
+              <input
+                  type="number"
+                  className="form-control"
+                  id="criteriaPoint"
+                  value={criteriaPoint}
+                  onChange={(e) => setCriteriaPoint(parseInt(e.target.value))}
+                  min="1"
+                  required
+              />
+              </div>
+          </div>
+          
+          <button type="submit" className="btn btn-primary">Add Criteria</button>
+        </form>
+      </div>
     </div>
   );
 }

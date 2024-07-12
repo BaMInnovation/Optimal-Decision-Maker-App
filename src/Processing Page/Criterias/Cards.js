@@ -24,12 +24,10 @@ function Cards() {
 ])
   return (
     <div className='criterias'>
-      <button type="button" class="btn btn-primary" style={{marginTop:"110px", marginLeft:"10px", marginBottom: "10px"}}>Add Criteria</button>
+      <button type="button" class="btn btn-primary" onClick={() => document.getElementsByClassName('overlay')[0].style.visibility = "visible"} style={{marginTop:"110px", marginLeft:"10px", marginBottom: "10px"}}>Add Criteria</button>
 
       
-
       <div className="cards-container">
-
         {criteriaCards.map((card) => {
           return <div className="card">
             <h3 style={{textAlign: "center"}}>{card.criteriaName}</h3>
