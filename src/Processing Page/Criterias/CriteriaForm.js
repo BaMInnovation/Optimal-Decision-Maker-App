@@ -18,9 +18,14 @@ function CriteriaForm() {
     };
   };
 
+  const handleCancelForm = () => {
+    document.getElementsByClassName('overlay')[0].style.visibility = "hidden"
+  }
+
+
   return (
     <div className='overlay'>
-      <div className="container mt-5" id='criteria-form'>
+      <div className="container" id='criteria-form'>
         <h2 style={{textAlign:"center"}}>Add New Criteria</h2>
         <form onSubmit={handleSubmit}>
 
@@ -96,7 +101,14 @@ function CriteriaForm() {
               </div>
           </div>
           
-          <button type="submit" className="btn btn-primary">Add Criteria</button>
+          <div className="row mt-5">
+          <div className="col text-start">
+            <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Add Criteria</button>
+          </div>
+          <div className="col text-end">
+            <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={() => handleCancelForm()}>Cancel</button>
+          </div>
+      </div>
         </form>
       </div>
     </div>
