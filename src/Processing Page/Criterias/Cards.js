@@ -5,7 +5,7 @@ import './Criterias.css';
 import { useState } from 'react';
 
 
-function Cards({criteriaCards, setCriteriaCards}) {/*
+function Cards({criteriaCards, setCriteriaCards, setEditCard}) {/*
   const [criteriaCards, setCriteriaCards] = useState([{
     criteriaName: "C1",
     dataType: "Categorical",
@@ -34,6 +34,7 @@ function Cards({criteriaCards, setCriteriaCards}) {/*
             <p><b>Data Type:</b> {card.dataType}</p>
             {card.categories && <p><b>Data Categories:</b> {card.categories.map((category, index) => {return  (<span key={index}>
                                                                                                           {category.categoryName}
+                                                                                                          {`(${category.categoryPoint})`}
                                                                                                           {index !== card.categories.length - 1 ? ", " : ""}
                                                                                                         </span>)
                                                                                                       })}</p>}
@@ -41,12 +42,10 @@ function Cards({criteriaCards, setCriteriaCards}) {/*
             <p><b>Criteria Point:</b> {card.criteriaPoint}</p>
 
 
-            <div className="row mt-2">
-              <div className="col text-start">
-                <button type="submit" className="btn btn-primary" onClick={() => {setCriteriaCards(criteriaCards.filter((mapCard) => mapCard !== card))}}>Delete</button>
-              </div>
-              <div className="col text-end">
-                <button type="button" className="btn btn-secondary" >Edit</button>
+            <div className="mt-auto">
+              <div className="d-flex justify-content-between">
+                <button type="button" className="btn btn-primary" onClick={() => setCriteriaCards(criteriaCards.filter((mapCard) => mapCard !== card))}>Delete</button>
+                <button type="button" className="btn btn-secondary" onClick={() => setEditCard({cardData: card, cardIndex: index})}>Edit</button>
               </div>
             </div>
 

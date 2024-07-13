@@ -1,13 +1,12 @@
-// CriteriaForm.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function CriteriaForm({criteriaCards, setCriteriaCards}) {
+function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }) {
   const [criteriaName, setCriteriaName] = useState('');
   const [dataType, setDataType] = useState('Numerical');
   const [characteristic, setCharacteristic] = useState('Beneficial');
   const [criteriaPoint, setCriteriaPoint] = useState(1);
-
+  const [categories, setCategories] = useState([{ categoryName: '', categoryPoint: '' }]);
 
 
   const handleSubmit = (e) => {
@@ -19,25 +18,64 @@ function CriteriaForm({criteriaCards, setCriteriaCards}) {
       characteristic,
       criteriaPoint,
     };
-    setCriteriaCards([...criteriaCards, formData]);
 
+    if (dataType === 'Categorical') {
+      formData.categories = categories;
+    }
+
+    if(!editCard) setCriteriaCards([...criteriaCards, formData]);
+    else {
+      setCriteriaCards(criteriaCards.map((card, index) => {return (index === editCard.cardIndex)? formData: card}))
+      setEditCard(null)
+    }
+
+    // Reset form fields
     setCriteriaName('');
     setDataType('Numerical');
     setCharacteristic('Beneficial');
     setCriteriaPoint(1);
+    setCategories([{ categoryName: '', categoryPoint: '' }]);
 
     handleCancelForm();
   };
 
-
   const handleCancelForm = () => {
-    document.getElementsByClassName('overlay')[0].style.visibility = "hidden"
+    document.getElementsByClassName('overlay')[0].style.visibility = "hidden";
     setCriteriaName('');
     setDataType('Numerical');
     setCharacteristic('Beneficial');
     setCriteriaPoint(1);
-  }
+    setCategories([{ categoryName: '', categoryPoint: '' }]);
+  };
 
+  const handleAddCategory = () => {
+    setCategories([...categories, { categoryName: '', categoryPoint: '' }]);
+  };
+
+  const handleCategoryChange = (index, field, value) => {
+    const newCategories = categories.slice();
+    newCategories[index][field] = value;
+    setCategories(newCategories);
+  };
+
+  const handleRemoveCategory = (index) => {
+    const newCategories = categories.slice();
+    newCategories.splice(index, 1);
+    setCategories(newCategories);
+  };
+
+
+  useEffect(() => {
+    if(editCard) {
+      const cardData = editCard.cardData
+      setCriteriaName(cardData.criteriaName);
+      setDataType(cardData.dataType);
+      setCharacteristic(cardData.characteristic);
+      setCriteriaPoint(cardData.criteriaPoint);
+      if(cardData.categories) setCategories(cardData.categories);
+      document.getElementsByClassName('overlay')[0].style.visibility = "visible";
+    }
+  }, [editCard]);
 
   return (
     <div className='overlay'>
@@ -73,6 +111,64 @@ function CriteriaForm({criteriaCards, setCriteriaCards}) {
             </select>
           </div>
           
+          {/* Categories Table */}
+          {dataType === 'Categorical' && (
+            <div className="mt-5">
+              <h5>Categories</h5>
+              <table className="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Category Name</th>
+                    <th scope="col">Category Point</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.map((category, index) => (
+                    <tr key={index}>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={category.categoryName}
+                          onChange={(e) => handleCategoryChange(index, 'categoryName', e.target.value)}
+                          required
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="form-control"
+                          value={category.categoryPoint}
+                          onChange={(e) => handleCategoryChange(index, 'categoryPoint', e.target.value)}
+                          required
+                        />
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleRemoveCategory(index)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <button
+                type="button"
+                className="btn btn-success btn-sm"
+                onClick={handleAddCategory}
+              >
+                Add Category
+              </button>
+            </div>
+          )}
+
+
+          {/* Characteristic and Criteria Point */}
           <div className='row mt-5'>
               <div className="mb-3 col-8">
                   <label className="form-label">Characteristic</label>
@@ -117,12 +213,13 @@ function CriteriaForm({criteriaCards, setCriteriaCards}) {
               </div>
           </div>
           
+          
           <div className="row mt-5">
             <div className="col text-start">
               <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Add Criteria</button>
             </div>
             <div className="col text-end">
-              <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={() => handleCancelForm()}>Cancel</button>
+              <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={handleCancelForm}>Cancel</button>
             </div>
           </div>
         </form>
