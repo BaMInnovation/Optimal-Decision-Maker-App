@@ -2,24 +2,40 @@
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function CriteriaForm() {
+function CriteriaForm({criteriaCards, setCriteriaCards}) {
   const [criteriaName, setCriteriaName] = useState('');
   const [dataType, setDataType] = useState('Numerical');
   const [characteristic, setCharacteristic] = useState('Beneficial');
   const [criteriaPoint, setCriteriaPoint] = useState(1);
 
+
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const formData = {
       criteriaName,
       dataType,
       characteristic,
       criteriaPoint,
     };
+    setCriteriaCards([...criteriaCards, formData]);
+
+    setCriteriaName('');
+    setDataType('Numerical');
+    setCharacteristic('Beneficial');
+    setCriteriaPoint(1);
+
+    handleCancelForm();
   };
+
 
   const handleCancelForm = () => {
     document.getElementsByClassName('overlay')[0].style.visibility = "hidden"
+    setCriteriaName('');
+    setDataType('Numerical');
+    setCharacteristic('Beneficial');
+    setCriteriaPoint(1);
   }
 
 
@@ -57,7 +73,7 @@ function CriteriaForm() {
             </select>
           </div>
           
-          <div className='row'>
+          <div className='row mt-5'>
               <div className="mb-3 col-8">
                   <label className="form-label">Characteristic</label>
                   <div>
@@ -102,13 +118,13 @@ function CriteriaForm() {
           </div>
           
           <div className="row mt-5">
-          <div className="col text-start">
-            <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Add Criteria</button>
+            <div className="col text-start">
+              <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Add Criteria</button>
+            </div>
+            <div className="col text-end">
+              <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={() => handleCancelForm()}>Cancel</button>
+            </div>
           </div>
-          <div className="col text-end">
-            <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={() => handleCancelForm()}>Cancel</button>
-          </div>
-      </div>
         </form>
       </div>
     </div>
