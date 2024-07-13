@@ -9,8 +9,9 @@
     z-index: 1; /* Ensure cards are at a lower z-index */
   }
   
-  .card {
+  .criteria-card{
     border: 1px solid #ccc;
+    background-color: antiquewhite;
     padding: 1rem;
     border-radius: 0.7rem;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
@@ -26,10 +27,12 @@
   /* Form */
   #criteria-form {
     width: 50%;
-    background-color: red;
+    background-color: rgb(0, 166, 255);
     border-radius: 3%;
     padding: 50px;
     z-index: 4; /* Ensure cards are at a lower z-index */
+    max-height: calc(80vh - 100px); /* Adjust to fit within the form */
+    overflow-y: auto;
 
   }
 

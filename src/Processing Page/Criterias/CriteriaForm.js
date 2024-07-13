@@ -216,7 +216,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
           
           <div className="row mt-5">
             <div className="col text-start">
-              <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Add Criteria</button>
+              <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Submit</button>
             </div>
             <div className="col text-end">
               <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={handleCancelForm}>Cancel</button>
