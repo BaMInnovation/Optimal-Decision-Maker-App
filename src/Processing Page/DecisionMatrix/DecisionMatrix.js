@@ -17,36 +17,40 @@ import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
 
 export default function DecisionMatrix({criteriaCards}) {
-     console.log("cccc. ", criteriaCards)
 
-    let emptyProduct = {
-        id: null,
-        name: '',
-        image: null,
-        description: '',
-        category: null,
-        price: 0,
-        quantity: 0,
-        rating: 0,
-        inventoryStatus: 'INSTOCK'
+    let emptyProduct;
+
+    useEffect(() => {
+       
+    }, criteriaCards);
+    
+    emptyProduct = {
     };
+    criteriaCards.map((card) => {
+        emptyProduct[card.criteriaName] = card.dataType === "Numerical"? 0: ""
+    })
+
 
     const [products, setProducts] = useState(null);
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
     const [product, setProduct] = useState(emptyProduct);
+    console.log("p: ", product, criteriaCards)
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
     const toast = useRef(null);
     const dt = useRef(null);
 
+    
+    /*   later when adding database, fetch data from there
     useEffect(() => {
         setProducts([]);
-    }, []);
+        }, []);
+    */
 
-
+    console.log(product)
 
     const formatCurrency = (value) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -85,7 +89,6 @@ export default function DecisionMatrix({criteriaCards}) {
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
             } else {
                 _product.id = createId();
-                _product.image = 'product-placeholder.svg';
                 _products.push(_product);
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
             }
@@ -164,9 +167,8 @@ export default function DecisionMatrix({criteriaCards}) {
     };
 
     const onInputChange = (e, name) => {
-        const val = (e.target && e.target.value) || '';
+        const val = e.value
         let _product = { ...product };
-
         _product[`${name}`] = val;
 
         setProduct(_product);
@@ -281,15 +283,64 @@ export default function DecisionMatrix({criteriaCards}) {
             </div>
 
             <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
-                {product.image && <img src={`https://primefaces.org/cdn/primereact/images/product/${product.image}`} alt={product.image} className="product-image block m-auto pb-3" />}
-                <div className="field">
+                
+                {criteriaCards.map((card, i) => {
+                    return(
+                    <div className="field">
+                        {true}
+                        <label htmlFor={i} className="font-bold">
+                            {card.criteriaName}
+                        </label>
+                        <InputNumber id={i} value={product.criteriaName} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
+                        {submitted && !product.criteriaName && <small className="p-error">{card.criteriaName} is required.</small>}
+                    </div>)
+                })}
+                
+                
+                
+            </Dialog>
+
+            <Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                    {product && (
+                        <span>
+                            Are you sure you want to delete <b>{product.name}</b>?
+                        </span>
+                    )}
+                </div>
+            </Dialog>
+
+            <Dialog visible={deleteProductsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
+                <div className="confirmation-content">
+                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
+                    {product && <span>Are you sure you want to delete the selected products?</span>}
+                </div>
+            </Dialog>
+        </div>
+    );
+}
+
+
+
+
+
+
+
+
+
+/*
+
+<div className="field">
                     <label htmlFor="name" className="font-bold">
                         Name
                     </label>
                     <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
                     {submitted && !product.name && <small className="p-error">Name is required.</small>}
                 </div>
-                <div className="field">
+
+
+            <div className="field">
                     <label htmlFor="description" className="font-bold">
                         Description
                     </label>
@@ -332,25 +383,4 @@ export default function DecisionMatrix({criteriaCards}) {
                         <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} />
                     </div>
                 </div>
-            </Dialog>
-
-            <Dialog visible={deleteProductDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductDialogFooter} onHide={hideDeleteProductDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                    {product && (
-                        <span>
-                            Are you sure you want to delete <b>{product.name}</b>?
-                        </span>
-                    )}
-                </div>
-            </Dialog>
-
-            <Dialog visible={deleteProductsDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Confirm" modal footer={deleteProductsDialogFooter} onHide={hideDeleteProductsDialog}>
-                <div className="confirmation-content">
-                    <i className="pi pi-exclamation-triangle mr-3" style={{ fontSize: '2rem' }} />
-                    {product && <span>Are you sure you want to delete the selected products?</span>}
-                </div>
-            </Dialog>
-        </div>
-    );
-}
+*/
