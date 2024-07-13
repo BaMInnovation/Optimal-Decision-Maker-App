@@ -31,7 +31,7 @@ export default function DecisionMatrix({criteriaCards}) {
     })
 
 
-    const [products, setProducts] = useState(null);
+    const [products, setProducts] = useState([]);
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
@@ -78,25 +78,23 @@ export default function DecisionMatrix({criteriaCards}) {
     const saveProduct = () => {
         setSubmitted(true);
 
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = { ...product };
+        let _products = [...products];
+        let _product = { ...product };
 
-            if (product.id) {
-                const index = findIndexById(product.id);
+        if (product.id) {
+            const index = findIndexById(product.id);
 
-                _products[index] = _product;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                _product.id = createId();
-                _products.push(_product);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
-
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
+            _products[index] = _product;
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+        } else {
+            _product.id = createId();
+            _products.push(_product);
+            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
         }
+
+        setProducts(_products);
+        setProductDialog(false);
+        setProduct(emptyProduct);
     };
 
     const editProduct = (product) => {
@@ -159,15 +157,11 @@ export default function DecisionMatrix({criteriaCards}) {
         toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
     };
 
-    const onCategoryChange = (e) => {
-        let _product = { ...product };
-
-        _product['category'] = e.value;
-        setProduct(_product);
-    };
+  
 
     const onInputChange = (e, name) => {
-        const val = e.value
+        const val = e.target? e.target.value: e.value;
+//        console.log("v: ", e.target.value)
         let _product = { ...product };
         _product[`${name}`] = val;
 
@@ -196,46 +190,7 @@ export default function DecisionMatrix({criteriaCards}) {
         return <Button label="Export" icon="pi pi-upload" className="p-button-help" onClick={exportCSV} />;
     };
 
-    const imageBodyTemplate = (rowData) => {
-        return <img src={`https://primefaces.org/cdn/primereact/images/product/${rowData.image}`} alt={rowData.image} className="shadow-2 border-round" style={{ width: '64px' }} />;
-    };
 
-    const priceBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.price);
-    };
-
-    const ratingBodyTemplate = (rowData) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
-    };
-
-    const statusBodyTemplate = (rowData) => {
-        return <Tag value={rowData.inventoryStatus} severity={getSeverity(rowData)}></Tag>;
-    };
-
-    const actionBodyTemplate = (rowData) => {
-        return (
-            <React.Fragment>
-                <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editProduct(rowData)} />
-                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteProduct(rowData)} />
-            </React.Fragment>
-        );
-    };
-
-    const getSeverity = (product) => {
-        switch (product.inventoryStatus) {
-            case 'INSTOCK':
-                return 'success';
-
-            case 'LOWSTOCK':
-                return 'warning';
-
-            case 'OUTOFSTOCK':
-                return 'danger';
-
-            default:
-                return null;
-        }
-    };
 
     const header = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
@@ -284,10 +239,17 @@ export default function DecisionMatrix({criteriaCards}) {
 
             <Dialog visible={productDialog} style={{ width: '32rem' }} breakpoints={{ '960px': '75vw', '641px': '90vw' }} header="Product Details" modal className="p-fluid" footer={productDialogFooter} onHide={hideDialog}>
                 
+                <div className="field">
+                    <label htmlFor="alternativeName" className="font-bold">
+                        Alternative name
+                    </label>
+                    <InputText id="alternativeName" value={product.criteriaName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && !product.alternativeName })} />
+                    {submitted && !product.alternativeName && <small className="p-error">Alternative name is required.</small>}
+                </div>
+                
                 {criteriaCards.map((card, i) => {
                     return(
                     <div className="field">
-                        {true}
                         <label htmlFor={i} className="font-bold">
                             {card.criteriaName}
                         </label>
@@ -330,7 +292,7 @@ export default function DecisionMatrix({criteriaCards}) {
 
 
 /*
-
+prev form
 <div className="field">
                     <label htmlFor="name" className="font-bold">
                         Name
@@ -383,4 +345,33 @@ export default function DecisionMatrix({criteriaCards}) {
                         <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} />
                     </div>
                 </div>
+*/
+
+
+/*
+    prev saveProduct
+
+    const saveProduct = () => {
+        setSubmitted(true);
+
+        if (product.name.trim()) {
+            let _products = [...products];
+            let _product = { ...product };
+
+            if (product.id) {
+                const index = findIndexById(product.id);
+
+                _products[index] = _product;
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+            } else {
+                _product.id = createId();
+                _products.push(_product);
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+            }
+
+            setProducts(_products);
+            setProductDialog(false);
+            setProduct(emptyProduct);
+        }
+    };
 */
