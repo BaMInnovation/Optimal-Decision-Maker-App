@@ -15,16 +15,16 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { Tag } from 'primereact/tag';
+import { Dropdown } from 'primereact/dropdown';
+import { FloatLabel } from 'primereact/floatlabel';
 
 export default function DecisionMatrix({criteriaCards}) {
 
     let emptyProduct;
 
-    useEffect(() => {
-       
-    }, criteriaCards);
     
     emptyProduct = {
+        alternativeName: ""
     };
     criteriaCards.map((card) => {
         emptyProduct[card.criteriaName] = card.dataType === "Numerical"? 0: ""
@@ -36,7 +36,6 @@ export default function DecisionMatrix({criteriaCards}) {
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
     const [product, setProduct] = useState(emptyProduct);
-    console.log("p: ", product, criteriaCards)
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
@@ -50,7 +49,6 @@ export default function DecisionMatrix({criteriaCards}) {
         }, []);
     */
 
-    console.log(product)
 
     const formatCurrency = (value) => {
         return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
@@ -76,25 +74,37 @@ export default function DecisionMatrix({criteriaCards}) {
     };
 
     const saveProduct = () => {
-        setSubmitted(true);
 
-        let _products = [...products];
-        let _product = { ...product };
+        let n = criteriaCards.length;
+        let blankExists = product.alternativeName.trim() === ""
+        
+        //check if categorical variables are empty
+        if(!blankExists)
+            for(let i = 0; i < n; i++) {
+                if(criteriaCards[i].dataType === "Categorical" && product[criteriaCards[i].criteriaName].trim() === "") {
+                    blankExists = true;
+                    break;
+                }
+            }
 
-        if (product.id) {
-            const index = findIndexById(product.id);
+        if(!blankExists){
+            let _products = [...products];
+            if (product.id) {
+                const index = findIndexById(product.id);
 
-            _products[index] = _product;
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-        } else {
-            _product.id = createId();
-            _products.push(_product);
-            toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+                _products[index] = product;
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+            } else {
+                product.id = createId();
+                _products.push(product);
+                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+            }
+
+            setProducts(_products);
+            setProductDialog(false);
+            setProduct(emptyProduct);
         }
-
-        setProducts(_products);
-        setProductDialog(false);
-        setProduct(emptyProduct);
+        setSubmitted(true);
     };
 
     const editProduct = (product) => {
@@ -161,7 +171,6 @@ export default function DecisionMatrix({criteriaCards}) {
 
     const onInputChange = (e, name) => {
         const val = e.target? e.target.value: e.value;
-//        console.log("v: ", e.target.value)
         let _product = { ...product };
         _product[`${name}`] = val;
 
@@ -255,18 +264,30 @@ export default function DecisionMatrix({criteriaCards}) {
                         Alternative name
                     </label>
                     <InputText id="alternativeName" value={product.criteriaName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && !product.alternativeName })} />
-                    {submitted && !product.alternativeName && <small className="p-error">Alternative name is required.</small>}
+                    {submitted && productDialog && !product.alternativeName && <small className="p-error">Alternative name is required.</small>}
                 </div>
                 
                 {criteriaCards.map((card, i) => {
-                    return(
-                    <div className="field">
-                        <label htmlFor={i} className="font-bold">
-                            {card.criteriaName}
-                        </label>
-                        <InputNumber id={i} value={product.criteriaName} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                        {submitted && !product.criteriaName && <small className="p-error">{card.criteriaName} is required.</small>}
-                    </div>)
+                    return card.dataType === "Numerical"? 
+                    (
+                        <div className="field">
+                            <label htmlFor={i} className="font-bold">
+                                {card.criteriaName}
+                            </label>
+                            <InputNumber id={i} value={0} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus />
+                        </div>
+                    ):
+                    (
+
+                        <div className="field">
+                            {console.log("ppt: ",product[card.criteriaName])}
+                            <label htmlFor={i} className="font-bold">
+                                {card.criteriaName}
+                            </label>
+                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={card.categories.map((category) => category.categoryName)} optionLabel="name" className={classNames({ 'p-invalid': submitted && product[card.criteriaName] === "" })} />
+                            {submitted && productDialog && product[card.criteriaName] === "" && <small className="p-error">{card.criteriaName} is required.</small>}
+                        </div>
+                    )
                 })}
 
                 <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
