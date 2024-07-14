@@ -18,7 +18,7 @@ import { Tag } from 'primereact/tag';
 import { Dropdown } from 'primereact/dropdown';
 import { FloatLabel } from 'primereact/floatlabel';
 
-export default function DecisionMatrix({criteriaCards}) {
+export default function DecisionMatrix({criteriaCards, products, setProducts}) {
 
     let emptyProduct;
 
@@ -31,7 +31,6 @@ export default function DecisionMatrix({criteriaCards}) {
     })
 
 
-    const [products, setProducts] = useState([]);
     const [productDialog, setProductDialog] = useState(false);
     const [deleteProductDialog, setDeleteProductDialog] = useState(false);
     const [deleteProductsDialog, setDeleteProductsDialog] = useState(false);
@@ -139,6 +138,7 @@ export default function DecisionMatrix({criteriaCards}) {
         return index;
     };
 
+    console.log("prs: ", products)
     const createId = () => {
         let id = '';
         let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -274,7 +274,7 @@ export default function DecisionMatrix({criteriaCards}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <InputNumber id={i} value={0} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus />
+                            <InputNumber id={i} value={0} min={1} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus />
                         </div>
                     ):
                     (
