@@ -45,10 +45,22 @@ console.log("ccc. ", criteriaCards)
             <p><b>Criteria Point:</b> {card.criteriaPoint}</p>
 
 
-            <div className="mt-auto">
-              <div className="d-flex justify-content-between">
-                <button type="button" className="btn btn-primary" onClick={() => setCriteriaCards(criteriaCards.filter((mapCard) => mapCard !== card))}>Delete</button>
-                <button type="button" className="btn btn-secondary" onClick={() => setEditCard({cardData: card, cardIndex: index})}>Edit</button>
+            <div className='mt-auto'>
+              <div className='d-flex justify-content-between'>
+                <button
+                  type='button'
+                  className='btn btn-primary'
+                  onClick={() => setCriteriaCards(criteriaCards.filter((mapCard) => mapCard !== card))}
+                >
+                  Delete
+                </button>
+                <button
+                  type='button'
+                  className='btn btn-secondary'
+                  onClick={() => setEditCard({ cardData: card, cardIndex: index })}
+                >
+                  Edit
+                </button>
               </div>
             </div>
 

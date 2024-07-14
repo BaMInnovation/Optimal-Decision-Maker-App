@@ -280,7 +280,6 @@ export default function DecisionMatrix({criteriaCards}) {
                     (
 
                         <div className="field">
-                            {console.log("ppt: ",product[card.criteriaName])}
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
