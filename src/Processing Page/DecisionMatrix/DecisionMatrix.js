@@ -192,6 +192,15 @@ export default function DecisionMatrix({criteriaCards}) {
 
 
 
+    const actionBodyTemplate = (rowData) => {
+        return (
+            <React.Fragment>
+                <Button icon="pi pi-pencil" rounded outlined className="mr-2" onClick={() => editProduct(rowData)} />
+                <Button icon="pi pi-trash" rounded outlined severity="danger" onClick={() => confirmDeleteProduct(rowData)} />
+            </React.Fragment>
+        );
+    };
+
     const header = (
         <div className="flex flex-wrap gap-2 align-items-center justify-content-between">
             <h4 className="m-0">Manage Products</h4>
@@ -231,9 +240,11 @@ export default function DecisionMatrix({criteriaCards}) {
                         paginatorTemplate="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} products" globalFilter={globalFilter} header={header}>
                     
+                    <Column selectionMode="multiple" exportable={false}></Column>
                     <Column field="alternativeName" header="Alternative Name" sortable style={{ minWidth: '12rem' }}></Column>
                     {criteriaCards.map((card) => {return <Column field={card.criteriaName} header={card.criteriaName} sortable style={{ minWidth: '12rem' }}></Column>})}
-                   
+                    <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
+
                 </DataTable>
             </div>
 
@@ -257,6 +268,9 @@ export default function DecisionMatrix({criteriaCards}) {
                         {submitted && !product.criteriaName && <small className="p-error">{card.criteriaName} is required.</small>}
                     </div>)
                 })}
+
+                <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
+
                 
                 
                 
