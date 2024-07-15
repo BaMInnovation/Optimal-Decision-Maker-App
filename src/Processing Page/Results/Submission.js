@@ -1,31 +1,50 @@
 import React, { useState } from 'react';
 
+import SAW from "./Saw.js"
 
 function Submission({products, criteriaCards}) {
 
-  const generateDecisionMatrix = () => {
+  const [results, setResults] = useState([])
+
+  const prepareForCalculation = () => {
     let n = products.length, m = criteriaCards.length
-    const decisionMatrix = Array.from({ length: n }, () => Array(m).fill(0)); // or any initial value
-    
+
+    //generate decision matrix
+    let decisionMatrix = Array.from({ length: n }, () => Array(m).fill(0)); // or any initial value
     for(let i = 0; i < n; i++) {
       for(let j = 0; j < m; j++) {
         let criteriaCard = criteriaCards[j]
         decisionMatrix[i][j] = (criteriaCard.dataType === 'Numerical')? products[i][criteriaCard.criteriaName]: criteriaCard.categories[products[i][criteriaCard.criteriaName]];
       }
     }
-    console.log(decisionMatrix)
+
+    //isBeneficial array
+    const isBeneficial = criteriaCards.map((card) => card.characteristic === "Beneficial")
+
+    const criteriaPoints = criteriaCards.map((card) => card.criteriaPoint)
+
+    return {decisionMatrix: decisionMatrix, isBeneficial: isBeneficial, criteriaPoints: criteriaPoints}
   }
-  generateDecisionMatrix()
+
   const calculate = () => {
-    
+    let inputs = prepareForCalculation();
+    let saw = new SAW();
+    const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
+    console.log(result)
+    setResults(result)
   }
 
   return (
-    <div className="Submission">
-       <button onClick={() => {calculate()}}>Submit</button>
+    <>
+      <button onClick={() => {calculate()}} style={{marginTop: "10px"}}>Submit</button>
+      <div className="Submission" style={{backgroundColor: "purple", marginTop: "20px"}}>
 
+        {results.map((result) => {return (<div className='results' style={{backgroundColor: "pink"}}>
+                                            <p>{result}</p>
+                                          </div>)})}
 
-    </div>
+      </div>
+    </>
   );
 }
 
