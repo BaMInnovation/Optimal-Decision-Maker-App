@@ -10,10 +10,10 @@ function Submission({products, criteriaCards}) {
     for(let i = 0; i < n; i++) {
       for(let j = 0; j < m; j++) {
         let criteriaCard = criteriaCards[j]
-//        decisionMatrix[i][j] = (criteriaCard.dataType === 'Numerical')? products[i][criteriaCard.criteriaName]: criteriaCard.categories[products[i][criteriaCard.criteriaName]];
+        decisionMatrix[i][j] = (criteriaCard.dataType === 'Numerical')? products[i][criteriaCard.criteriaName]: criteriaCard.categories[products[i][criteriaCard.criteriaName]];
       }
     }
-    console.log(criteriaCards)
+    console.log(decisionMatrix)
   }
   generateDecisionMatrix()
   const calculate = () => {
