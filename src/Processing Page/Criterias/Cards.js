@@ -23,8 +23,6 @@ function Cards({criteriaCards, setCriteriaCards, setEditCard}) {/*
   }  
 ])*/
 
-console.log("ccc. ", criteriaCards)
-
   return (
     <div className='criterias'>
       <button type="button" className="btn btn-primary" onClick={() => document.getElementsByClassName('overlay')[0].style.visibility = "visible"} style={{marginTop:"60px", marginLeft:"10px", marginBottom: "10px"}}>Add Criteria</button>
@@ -35,12 +33,14 @@ console.log("ccc. ", criteriaCards)
           return <div className="criteria-card" key={index}>
             <h3 style={{textAlign: "center"}}>{card.criteriaName}</h3>
             <p><b>Data Type:</b> {card.dataType}</p>
-            {card.categories && <p><b>Data Categories:</b> {card.categories.map((category, index) => {return  (<span key={index}>
-                                                                                                          {category.categoryName}
-                                                                                                          {`(${category.categoryPoint})`}
-                                                                                                          {index !== card.categories.length - 1 ? ", " : ""}
-                                                                                                        </span>)
-                                                                                                      })}</p>}
+            {card.categories && <p><b>Data Categories:</b> {Object.keys(card.categories).map((category, index) => {return  (<span key={index}>
+                                                                                                                              {category}
+                                                                                                                              {`(${card.categories[category]})`}
+                                                                                                                              {index !== Object.keys(card.categories).length - 1 ? ", " : ""}
+                                                                                                                            </span>)
+                                                                                                                          })}</p>}
+
+                                                                                                      
             <p><b>Characteristic:</b> {card.characteristic}</p>
             <p><b>Criteria Point:</b> {card.criteriaPoint}</p>
 

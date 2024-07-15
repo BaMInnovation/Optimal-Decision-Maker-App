@@ -19,7 +19,7 @@ function ProcessingPage() {
       <CriteriaForm criteriaCards={criteriaCards} setCriteriaCards ={setCriteriaCards} editCard={editCard} setEditCard={setEditCard} />
       <Cards criteriaCards={criteriaCards} setCriteriaCards={setCriteriaCards} setEditCard={setEditCard} />    
       <DecisionMatrix criteriaCards={criteriaCards} products={products} setProducts={setProducts} /> 
-      <Submission products={products}/>
+      <Submission products={products} criteriaCards={criteriaCards}/>
 
     </div>
   );

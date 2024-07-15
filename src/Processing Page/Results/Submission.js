@@ -1,12 +1,24 @@
 import React, { useState } from 'react';
 
 
-function Submission({products}) {
+function Submission({products, criteriaCards}) {
 
+  const generateDecisionMatrix = () => {
+    let n = products.length, m = criteriaCards.length
+    const decisionMatrix = Array.from({ length: n }, () => Array(m).fill(0)); // or any initial value
+    
+    for(let i = 0; i < n; i++) {
+      for(let j = 0; j < m; j++) {
+        let criteriaCard = criteriaCards[j]
+//        decisionMatrix[i][j] = (criteriaCard.dataType === 'Numerical')? products[i][criteriaCard.criteriaName]: criteriaCard.categories[products[i][criteriaCard.criteriaName]];
+      }
+    }
+    console.log(criteriaCards)
+  }
+  generateDecisionMatrix()
   const calculate = () => {
-    const array = Array.from({ length: 5 }, () => Array(4).fill(0)); // or any initial value
-    console.log("sadf: ", array)
-}
+    
+  }
 
   return (
     <div className="Submission">

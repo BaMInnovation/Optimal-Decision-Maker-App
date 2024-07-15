@@ -6,12 +6,12 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
   const [dataType, setDataType] = useState('Numerical');
   const [characteristic, setCharacteristic] = useState('Beneficial');
   const [criteriaPoint, setCriteriaPoint] = useState(1);
-  const [categories, setCategories] = useState([{ categoryName: '', categoryPoint: '' }]);
-
+  const [categories, setCategories] = useState({ '': '' });
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log("Submitted")
     const formData = {
       criteriaName,
       dataType,
@@ -34,7 +34,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
     setDataType('Numerical');
     setCharacteristic('Beneficial');
     setCriteriaPoint(1);
-    setCategories([{ categoryName: '', categoryPoint: '' }]);
+    setCategories({ '': '' });
 
     handleCancelForm();
   };
@@ -45,24 +45,41 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
     setDataType('Numerical');
     setCharacteristic('Beneficial');
     setCriteriaPoint(1);
-    setCategories([{ categoryName: '', categoryPoint: '' }]);
+    setCategories({ '': '' });
   };
 
   const handleAddCategory = () => {
-    setCategories([...categories, { categoryName: '', categoryPoint: '' }]);
+    setCategories({ ...categories, '': '' });
   };
 
   const handleCategoryChange = (index, field, value) => {
-    const newCategories = categories.slice();
-    newCategories[index][field] = value;
-    setCategories(newCategories);
+    let _categories = { ...categories };
+    const keys = Object.keys(_categories);
+    console.log(categories)
+    if (field === 'categoryName') {
+      const oldKey = keys[index];
+      const oldValue = _categories[oldKey];
+      delete _categories[oldKey];
+      _categories[value] = oldValue;
+    } else if (field === 'categoryPoint') {
+      const key = keys[index];
+      _categories[key] = parseInt(value);
+    }
+  
+    setCategories(_categories);
   };
 
-  const handleRemoveCategory = (index) => {
+  const handleRemoveCategory = (index, category) => {
+    let _categories = {...categories};
+    delete _categories[category];
+    setCategories(_categories);
+
+    /*
     const newCategories = categories.slice();
     newCategories.splice(index, 1);
     setCategories(newCategories);
-  };
+  */
+ };
 
 
   useEffect(() => {
@@ -124,13 +141,13 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
                   </tr>
                 </thead>
                 <tbody>
-                  {categories.map((category, index) => (
+                  {Object.keys(categories).map((category, index) => (
                     <tr key={index}>
                       <td>
                         <input
                           type="text"
                           className="form-control"
-                          value={category.categoryName}
+                          value={category}
                           onChange={(e) => handleCategoryChange(index, 'categoryName', e.target.value)}
                           required
                         />
@@ -139,7 +156,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
                         <input
                           type="number"
                           className="form-control"
-                          value={category.categoryPoint}
+                          value={categories[category]}
                           onChange={(e) => handleCategoryChange(index, 'categoryPoint', e.target.value)}
                           required
                         />
@@ -148,13 +165,14 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
                         <button
                           type="button"
                           className="btn btn-danger btn-sm"
-                          onClick={() => handleRemoveCategory(index)}
+                          onClick={() => handleRemoveCategory(index, category)}
                         >
                           Delete
                         </button>
                       </td>
                     </tr>
-                  ))}
+                  ))
+                  }
                 </tbody>
               </table>
               <button
@@ -216,7 +234,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
           
           <div className="row mt-5">
             <div className="col text-start">
-              <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}>Submit</button>
+              <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}  onClick={handleSubmit}>Submit</button>
             </div>
             <div className="col text-end">
               <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={handleCancelForm}>Cancel</button>
@@ -229,3 +247,39 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
 }
 
 export default CriteriaForm;
+
+
+/*
+
+categories.map((category, index) => (
+                    <tr key={index}>
+                      <td>
+                        <input
+                          type="text"
+                          className="form-control"
+                          value={category.categoryName}
+                          onChange={(e) => handleCategoryChange(index, 'categoryName', e.target.value)}
+                          required
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="number"
+                          className="form-control"
+                          value={category.categoryPoint}
+                          onChange={(e) => handleCategoryChange(index, 'categoryPoint', e.target.value)}
+                          required
+                        />
+                      </td>
+                      <td>
+                        <button
+                          type="button"
+                          className="btn btn-danger btn-sm"
+                          onClick={() => handleRemoveCategory(index)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+*/

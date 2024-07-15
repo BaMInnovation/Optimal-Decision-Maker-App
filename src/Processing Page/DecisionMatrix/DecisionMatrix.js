@@ -138,7 +138,6 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         return index;
     };
 
-    console.log("prs: ", products)
     const createId = () => {
         let id = '';
         let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -251,7 +250,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                     
                     <Column selectionMode="multiple" exportable={false}></Column>
                     <Column field="alternativeName" header="Alternative Name" sortable style={{ minWidth: '12rem' }}></Column>
-                    {criteriaCards.map((card) => {return <Column field={card.criteriaName} header={card.criteriaName} sortable style={{ minWidth: '12rem' }}></Column>})}
+                    {criteriaCards.map((card, i) => {return <Column key={i} field={card.criteriaName} header={card.criteriaName} sortable style={{ minWidth: '12rem' }}></Column>})}
                     <Column body={actionBodyTemplate} exportable={false} style={{ minWidth: '8rem' }}></Column>
 
                 </DataTable>
@@ -283,7 +282,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={card.categories.map((category) => category.categoryName)} optionLabel="name" className={classNames({ 'p-invalid': submitted && product[card.criteriaName] === "" })} />
+                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={Object.keys(card.categories).map((category) => (category))} optionLabel="name" className={classNames({ 'p-invalid': submitted && product[card.criteriaName] === "" })} />
                             {submitted && productDialog && product[card.criteriaName] === "" && <small className="p-error">{card.criteriaName} is required.</small>}
                         </div>
                     )
