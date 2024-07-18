@@ -26,11 +26,12 @@ function Submission({products, criteriaCards}) {
     return {decisionMatrix: decisionMatrix, isBeneficial: isBeneficial, criteriaPoints: criteriaPoints}
   }
 
+
   const calculate = () => {
     let inputs = prepareForCalculation();
     let saw = new SAW();
     const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
-    console.log(result)
+    console.log(inputs.decisionMatrix, results)
     setResults(result)
   }
 
@@ -39,8 +40,8 @@ function Submission({products, criteriaCards}) {
       <button onClick={() => {calculate()}} style={{marginTop: "10px"}}>Submit</button>
       <div className="Submission" style={{backgroundColor: "purple", marginTop: "20px"}}>
 
-        {results.map((result) => {return (<div className='results' style={{backgroundColor: "pink"}}>
-                                            <p>{result}</p>
+        {results.map((result, index) => {return (<div className='results' style={{backgroundColor: "pink"}}>
+                                            <p>{products[index].alternativeName}: {result}</p>
                                           </div>)})}
 
       </div>

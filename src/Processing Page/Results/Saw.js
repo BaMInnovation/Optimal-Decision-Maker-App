@@ -75,9 +75,9 @@ export default class SAW extends McdmMethods {
         let normalizedMatrix = this.normalize(decisionMatrix, isBeneficial);
         let weightedMultiplicationMatrix = this.multiplyWithWeights(normalizedMatrix, weights);
         let alternativesScores = this.summationOfCriterias(weightedMultiplicationMatrix);
-        let sortedAlternatives = this.sortingAlternatives(alternativesScores);
+        //let sortedAlternatives = this.sortingAlternatives(alternativesScores);
 
-        return sortedAlternatives;
+        return alternativesScores;
     }
 }
 
