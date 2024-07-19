@@ -6,6 +6,8 @@ function Submission({products, criteriaCards}) {
 
   const [results, setResults] = useState([])
 
+  const [submitted, setSubmitted] = useState(false);
+
   const prepareForCalculation = () => {
     let n = products.length, m = criteriaCards.length
 
@@ -27,12 +29,15 @@ function Submission({products, criteriaCards}) {
   }
 
 
+  console.log(criteriaCards.length)
   const calculate = () => {
-    let inputs = prepareForCalculation();
-    let saw = new SAW();
-    const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
-    console.log(inputs.decisionMatrix, results)
-    setResults(result)
+    setSubmitted(true)
+    if(criteriaCards.length !== 0) {
+      let inputs = prepareForCalculation();
+      let saw = new SAW();
+      const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
+      setResults(result)
+    }
   }
 
   return (
@@ -40,9 +45,11 @@ function Submission({products, criteriaCards}) {
       <button onClick={() => {calculate()}} style={{marginTop: "10px"}}>Submit</button>
       <div className="Submission" style={{backgroundColor: "purple", marginTop: "20px"}}>
 
-        {results.map((result, index) => {return (<div className='results' style={{backgroundColor: "pink"}}>
+        {submitted && 
+        (criteriaCards.length && results.map((result, index) => {return (<div className='results' style={{backgroundColor: "pink"}}>
                                             <p>{products[index].alternativeName}: {result}</p>
-                                          </div>)})}
+                                          </div>)}) 
+      || <h1 style={{color:"red"}}>First add some criterias</h1>) }
 
       </div>
     </>

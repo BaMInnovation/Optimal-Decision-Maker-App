@@ -27,7 +27,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         alternativeName: ""
     };
     criteriaCards.map((card) => {
-        emptyProduct[card.criteriaName] = card.dataType === "Numerical"? 0: ""
+        emptyProduct[card.criteriaName] = card.dataType === "Numerical"? 1: ""
     })
 
 
@@ -237,6 +237,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         </React.Fragment>
     );
 
+    console.log(product)
     return (
         <div style={{marginTop: "110px"}}>
             <Toast ref={toast} />
@@ -273,7 +274,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <InputNumber id={i} value={0} min={1} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus />
+                            <InputNumber id={i} value={1} min={1} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus />
                         </div>
                     ):
                     (

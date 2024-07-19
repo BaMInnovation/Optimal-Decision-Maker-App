@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }) {
+function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, criteriaNames, setCriteriaNames }) {
   let [criteriaName, setCriteriaName] = useState('');
   const [dataType, setDataType] = useState('Numerical');
   const [characteristic, setCharacteristic] = useState('Beneficial');
@@ -11,13 +11,13 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
 
   const [validInputs, setValidInputs] = useState({ validCriteriaName: true, criteriaNameDoesntExist: true/*, validCategoryInputs: true*/ });
 
-  const [criteriaNames, setCriteriaNames] = useState(new Set());
 
-  console.log(validInputs)
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
     criteriaName = criteriaName.trim();
+    console.log("ccc bozkürt: ", criteriaNames)
 
     let _validInputs = {};
     _validInputs.validCriteriaName = criteriaName !== ''
@@ -48,7 +48,8 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
       setCriteriaPoint(1);
       setCategories({ '': '' });
 
-      setCriteriaNames(criteriaNames.add(criteriaName));
+      criteriaNames.add(criteriaName)
+      setCriteriaNames(criteriaNames);
       handleCancelForm();
     }
   };
@@ -71,7 +72,6 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
   const handleCategoryChange = (index, field, value) => {
     let _categories = { ...categories };
     const keys = Object.keys(_categories);
-    console.log(categories)
     if (field === 'categoryName') {
       const oldKey = keys[index];
       const oldValue = _categories[oldKey];
@@ -94,6 +94,10 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
 
   useEffect(() => {
     if(editCard) {
+      console.log("kürdp: ", editCard.cardData.criteriaName);
+      criteriaNames.delete(editCard.cardData.criteriaName)
+      setCriteriaNames(criteriaNames);
+
       const cardData = editCard.cardData
       setCriteriaName(cardData.criteriaName);
       setDataType(cardData.dataType);

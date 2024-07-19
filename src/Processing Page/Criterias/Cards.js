@@ -5,7 +5,7 @@ import './Criterias.css';
 import { useState } from 'react';
 
 
-function Cards({criteriaCards, setCriteriaCards, setEditCard}) {/*
+function Cards({criteriaCards, setCriteriaCards, setEditCard, setCriteriaNames, criteriaNames}) {/*
   const [criteriaCards, setCriteriaCards] = useState([{
     criteriaName: "C1",
     dataType: "Categorical",
@@ -50,7 +50,11 @@ function Cards({criteriaCards, setCriteriaCards, setEditCard}) {/*
                 <button
                   type='button'
                   className='btn btn-primary'
-                  onClick={() => setCriteriaCards(criteriaCards.filter((mapCard) => mapCard !== card))}
+                  onClick={() => {
+                    setCriteriaCards(criteriaCards.filter((mapCard) => mapCard !== card));
+                    criteriaNames.delete(card.criteriaName);
+                    setCriteriaNames(criteriaNames)
+                  }}
                 >
                   Delete
                 </button>
