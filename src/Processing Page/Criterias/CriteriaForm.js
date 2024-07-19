@@ -2,41 +2,48 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }) {
-  const [criteriaName, setCriteriaName] = useState('');
+  let [criteriaName, setCriteriaName] = useState('');
   const [dataType, setDataType] = useState('Numerical');
   const [characteristic, setCharacteristic] = useState('Beneficial');
   const [criteriaPoint, setCriteriaPoint] = useState(1);
   const [categories, setCategories] = useState({ '': '' });
 
+
+  const [validInputs, setValidInputs] = useState({ validCriteriaName: true/*, validCategoryInputs: true*/ });
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    criteriaName = criteriaName.trim();
 
-    console.log("Submitted")
-    const formData = {
-      criteriaName,
-      dataType,
-      characteristic,
-      criteriaPoint,
-    };
+    let _validInputs = {};
+    _validInputs.validCriteriaName = criteriaName !== ''
+    //_validInputs.validCategoryInputs = criteriaName === ''
+    setValidInputs(_validInputs);
+    if(_validInputs.validCriteriaName) {
+      const formData = {
+        criteriaName,
+        dataType,
+        characteristic,
+        criteriaPoint,
+      };
 
-    if (dataType === 'Categorical') {
-      formData.categories = categories;
+      if (dataType === 'Categorical') formData.categories = categories;
+
+      if(!editCard) setCriteriaCards([...criteriaCards, formData]);
+      else {
+        setCriteriaCards(criteriaCards.map((card, index) => {return (index === editCard.cardIndex)? formData: card}))
+        setEditCard(null)
+      }
+
+      // Reset form fields
+      setCriteriaName('');
+      setDataType('Numerical');
+      setCharacteristic('Beneficial');
+      setCriteriaPoint(1);
+      setCategories({ '': '' });
+
+      handleCancelForm();
     }
-
-    if(!editCard) setCriteriaCards([...criteriaCards, formData]);
-    else {
-      setCriteriaCards(criteriaCards.map((card, index) => {return (index === editCard.cardIndex)? formData: card}))
-      setEditCard(null)
-    }
-
-    // Reset form fields
-    setCriteriaName('');
-    setDataType('Numerical');
-    setCharacteristic('Beneficial');
-    setCriteriaPoint(1);
-    setCategories({ '': '' });
-
-    handleCancelForm();
   };
 
   const handleCancelForm = () => {
@@ -69,16 +76,10 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
     setCategories(_categories);
   };
 
-  const handleRemoveCategory = (index, category) => {
+  const handleRemoveCategory = (category) => {
     let _categories = {...categories};
     delete _categories[category];
     setCategories(_categories);
-
-    /*
-    const newCategories = categories.slice();
-    newCategories.splice(index, 1);
-    setCategories(newCategories);
-  */
  };
 
 
@@ -111,6 +112,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
               onChange={(e) => setCriteriaName(e.target.value)}
               required
             />
+             {!validInputs.validCriteriaName && <small className="p-error"><strong>Criteria name is required.</strong></small>}
           </div>
 
           {/* Data type */}   
@@ -165,7 +167,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
                         <button
                           type="button"
                           className="btn btn-danger btn-sm"
-                          onClick={() => handleRemoveCategory(index, category)}
+                          onClick={() => handleRemoveCategory(category)}
                         >
                           Delete
                         </button>
