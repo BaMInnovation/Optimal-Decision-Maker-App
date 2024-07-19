@@ -9,7 +9,11 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
   const [categories, setCategories] = useState({ '': '' });
 
 
-  const [validInputs, setValidInputs] = useState({ validCriteriaName: true/*, validCategoryInputs: true*/ });
+  const [validInputs, setValidInputs] = useState({ validCriteriaName: true, criteriaNameDoesntExist: true/*, validCategoryInputs: true*/ });
+
+  const [criteriaNames, setCriteriaNames] = useState(new Set());
+
+  console.log(validInputs)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,9 +21,11 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
 
     let _validInputs = {};
     _validInputs.validCriteriaName = criteriaName !== ''
+    _validInputs.criteriaNameDoesntExist = !criteriaNames.has(criteriaName)
     //_validInputs.validCategoryInputs = criteriaName === ''
-    setValidInputs(_validInputs);
-    if(_validInputs.validCriteriaName) {
+    setValidInputs(_validInputs );
+
+    if(_validInputs.validCriteriaName && _validInputs.criteriaNameDoesntExist) {
       const formData = {
         criteriaName,
         dataType,
@@ -42,6 +48,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
       setCriteriaPoint(1);
       setCategories({ '': '' });
 
+      setCriteriaNames(criteriaNames.add(criteriaName));
       handleCancelForm();
     }
   };
@@ -53,6 +60,8 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
     setCharacteristic('Beneficial');
     setCriteriaPoint(1);
     setCategories({ '': '' });
+
+    setValidInputs({validCriteriaName: true, criteriaNameDoesntExist: true});
   };
 
   const handleAddCategory = () => {
@@ -112,7 +121,8 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard }
               onChange={(e) => setCriteriaName(e.target.value)}
               required
             />
-             {!validInputs.validCriteriaName && <small className="p-error"><strong>Criteria name is required.</strong></small>}
+             {!validInputs.validCriteriaName && <small className="p-error"><strong>Criteria name is required!</strong></small> ||
+              !validInputs.criteriaNameDoesntExist && <small className="p-error"><strong>Criteria name already exists!</strong></small>}
           </div>
 
           {/* Data type */}   
