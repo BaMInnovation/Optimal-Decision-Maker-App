@@ -122,6 +122,8 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
     const deleteProduct = () => {
         let _products = products.filter((val) => val.id !== product.id);
 
+        alternativeNames.delete(product.alternativeName)
+
         setProducts(_products);
         setDeleteProductDialog(false);
         setProduct(emptyProduct);
@@ -162,6 +164,8 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
 
     const deleteSelectedProducts = () => {
         let _products = products.filter((val) => !selectedProducts.includes(val));
+
+        selectedProducts.map((pd) => alternativeNames.delete(pd.alternativeName))        
 
         setProducts(_products);
         setDeleteProductsDialog(false);
@@ -322,4 +326,14 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
 
 
 
+
+
+
+
+/*
+
+    alternative name already exists: 
+      - for edit, it should not check it  -> simply define use state edit, when edit button clicked, set it true, in save product, if it is true, make it false
+      - in edit, if you change the alternative name, delete the old one from set and add the new one
+*/
 
