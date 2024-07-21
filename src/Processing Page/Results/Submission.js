@@ -28,15 +28,32 @@ function Submission({products, criteriaCards}) {
     return {decisionMatrix: decisionMatrix, isBeneficial: isBeneficial, criteriaPoints: criteriaPoints}
   }
 
+  
 
-  console.log(criteriaCards.length)
   const calculate = () => {
-    setSubmitted(true)
-    if(criteriaCards.length !== 0) {
-      let inputs = prepareForCalculation();
-      let saw = new SAW();
-      const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
-      setResults(result)
+    //check if any empty left
+    const n = products.length;
+    const m = criteriaCards.length;
+    let valid = true;
+    for(let i = 0; i < n; i++) {
+      for(let j = 0; j < m; j++) 
+        if(!products[i][criteriaCards[j].criteriaName]) {
+          alert(`${criteriaCards[j].criteriaName} criteria for ${products[i].alternativeName} alternative is empty`)
+
+          valid = false;
+          break;
+        }
+      if(!valid) break;
+    }
+
+    if(valid) {
+      setSubmitted(true)
+      if(criteriaCards.length !== 0) {
+        let inputs = prepareForCalculation();
+        let saw = new SAW();
+        const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
+        setResults(result)
+      }
     }
   }
 
@@ -46,7 +63,7 @@ function Submission({products, criteriaCards}) {
       <div className="Submission" style={{backgroundColor: "purple", marginTop: "20px"}}>
 
         {submitted && 
-        (criteriaCards.length && results.map((result, index) => {return (<div className='results' style={{backgroundColor: "pink"}}>
+        (criteriaCards.length && results.map((result, index) => {return (<div key={index} className='results' style={{backgroundColor: "pink"}}>
                                             <p>{products[index].alternativeName}: {result}</p>
                                           </div>)}) 
       || <h1 style={{color:"red"}}>First add some criterias</h1>) }

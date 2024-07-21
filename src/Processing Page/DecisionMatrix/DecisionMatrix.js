@@ -27,7 +27,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         alternativeName: ""
     };
     criteriaCards.map((card) => {
-        emptyProduct[card.criteriaName] = card.dataType === "Numerical"? 1: ""
+        emptyProduct[card.criteriaName] = ""/*card.dataType === "Numerical"? 1: ""*/
     })
 
 
@@ -42,16 +42,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
     const dt = useRef(null);
 
     
-    /*   later when adding database, fetch data from there
-    useEffect(() => {
-        setProducts([]);
-        }, []);
-    */
-
-
-    const formatCurrency = (value) => {
-        return value.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-    };
+   
 
     const openNew = () => {
         setProduct(emptyProduct);
@@ -77,10 +68,14 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         let n = criteriaCards.length;
         let blankExists = product.alternativeName.trim() === ""
         
+        
         //check if categorical variables are empty
         if(!blankExists)
             for(let i = 0; i < n; i++) {
-                if(criteriaCards[i].dataType === "Categorical" && product[criteriaCards[i].criteriaName].trim() === "") {
+                let card = criteriaCards[i];
+                if(card.dataType === "Categorical") 
+                    product[card.criteriaName] = product[card.criteriaName].trim()
+                if(product[card.criteriaName] === "") {
                     blankExists = true;
                     break;
                 }
@@ -107,6 +102,9 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
     };
 
     const editProduct = (product) => {
+        let a = {"x": 12}
+        a.b = null
+        console.log(a)
         setProduct({ ...product });
         setProductDialog(true);
     };
@@ -237,7 +235,6 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         </React.Fragment>
     );
 
-    console.log(product)
     return (
         <div style={{marginTop: "110px"}}>
             <Toast ref={toast} />
@@ -263,7 +260,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                     <label htmlFor="alternativeName" className="font-bold">
                         Alternative name
                     </label>
-                    <InputText id="alternativeName" value={product.criteriaName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && !product.alternativeName })} />
+                    <InputText id="alternativeName" value={product.alternativeName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && !product.alternativeName })} />
                     {submitted && productDialog && !product.alternativeName && <small className="p-error">Alternative name is required.</small>}
                 </div>
                 
@@ -274,7 +271,8 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <InputNumber id={i} value={1} min={1} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus />
+                            <InputNumber id={i} min={1} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus className={classNames({ 'p-invalid': submitted && product[card.criteriaName] === "" })}/>
+                            {submitted && productDialog && product[card.criteriaName] === "" && <small className="p-error">{card.criteriaName} is required.</small>}
                         </div>
                     ):
                     (
@@ -320,92 +318,3 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
 
 
 
-
-
-
-
-
-/*
-prev form
-<div className="field">
-                    <label htmlFor="name" className="font-bold">
-                        Name
-                    </label>
-                    <InputText id="name" value={product.name} onChange={(e) => onInputChange(e, 'name')} required autoFocus className={classNames({ 'p-invalid': submitted && !product.name })} />
-                    {submitted && !product.name && <small className="p-error">Name is required.</small>}
-                </div>
-
-
-            <div className="field">
-                    <label htmlFor="description" className="font-bold">
-                        Description
-                    </label>
-                    <InputTextarea id="description" value={product.description} onChange={(e) => onInputChange(e, 'description')} required rows={3} cols={20} />
-                </div>
-
-                <div className="field">
-                    <label className="mb-3 font-bold">Category</label>
-                    <div className="formgrid grid">
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category1" name="category" value="Accessories" onChange={onCategoryChange} checked={product.category === 'Accessories'} />
-                            <label htmlFor="category1">Accessories</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category2" name="category" value="Clothing" onChange={onCategoryChange} checked={product.category === 'Clothing'} />
-                            <label htmlFor="category2">Clothing</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category3" name="category" value="Electronics" onChange={onCategoryChange} checked={product.category === 'Electronics'} />
-                            <label htmlFor="category3">Electronics</label>
-                        </div>
-                        <div className="field-radiobutton col-6">
-                            <RadioButton inputId="category4" name="category" value="Fitness" onChange={onCategoryChange} checked={product.category === 'Fitness'} />
-                            <label htmlFor="category4">Fitness</label>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="formgrid grid">
-                    <div className="field col">
-                        <label htmlFor="price" className="font-bold">
-                            Price
-                        </label>
-                        <InputNumber id="price" value={product.price} onValueChange={(e) => onInputNumberChange(e, 'price')} mode="currency" currency="USD" locale="en-US" />
-                    </div>
-                    <div className="field col">
-                        <label htmlFor="quantity" className="font-bold">
-                            Quantity
-                        </label>
-                        <InputNumber id="quantity" value={product.quantity} onValueChange={(e) => onInputNumberChange(e, 'quantity')} />
-                    </div>
-                </div>
-*/
-
-
-/*
-    prev saveProduct
-
-    const saveProduct = () => {
-        setSubmitted(true);
-
-        if (product.name.trim()) {
-            let _products = [...products];
-            let _product = { ...product };
-
-            if (product.id) {
-                const index = findIndexById(product.id);
-
-                _products[index] = _product;
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-            } else {
-                _product.id = createId();
-                _products.push(_product);
-                toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-            }
-
-            setProducts(_products);
-            setProductDialog(false);
-            setProduct(emptyProduct);
-        }
-    };
-*/
