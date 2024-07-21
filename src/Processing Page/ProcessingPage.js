@@ -10,6 +10,7 @@ function ProcessingPage() {
 
   const [criteriaCards, setCriteriaCards] = useState([]);
   const [editCard, setEditCard] = useState(null);
+
   const [criteriaNames, setCriteriaNames] = useState(new Set());
 
   const [products, setProducts] = useState([]);
@@ -19,7 +20,7 @@ function ProcessingPage() {
     <div className="ProcessingPage" style={{backgroundColor:"cyan", minHeight:"100vh"}}>
       <CriteriaForm criteriaCards={criteriaCards} setCriteriaCards ={setCriteriaCards} editCard={editCard} setEditCard={setEditCard} criteriaNames={criteriaNames} setCriteriaNames={setCriteriaNames}/>
       <Cards criteriaCards={criteriaCards} setCriteriaCards={setCriteriaCards} setEditCard={setEditCard} criteriaNames={criteriaNames} setCriteriaNames={setCriteriaNames}/>    
-      <DecisionMatrix criteriaCards={criteriaCards} products={products} setProducts={setProducts} /> 
+      <DecisionMatrix criteriaCards={criteriaCards} products={products} setProducts={setProducts}/> 
       <Submission products={products} criteriaCards={criteriaCards}/>
 
     </div>

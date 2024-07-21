@@ -21,13 +21,14 @@ import { FloatLabel } from 'primereact/floatlabel';
 export default function DecisionMatrix({criteriaCards, products, setProducts}) {
 
     let emptyProduct;
+    const [alternativeNames, setAlternativeNames] = useState(new Set());
 
     
     emptyProduct = {
         alternativeName: ""
     };
     criteriaCards.map((card) => {
-        emptyProduct[card.criteriaName] = ""/*card.dataType === "Numerical"? 1: ""*/
+        emptyProduct[card.criteriaName] = ""
     })
 
 
@@ -66,7 +67,8 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
     const saveProduct = () => {
 
         let n = criteriaCards.length;
-        let blankExists = product.alternativeName.trim() === ""
+        product.alternativeName = product.alternativeName.trim()
+        let blankExists = product.alternativeName === "" || alternativeNames.has(product.alternativeName)
         
         
         //check if categorical variables are empty
@@ -94,17 +96,20 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                 toast.current.show({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
             }
 
+            alternativeNames.add(product.alternativeName)
+            setAlternativeNames(alternativeNames)
+
             setProducts(_products);
             setProductDialog(false);
             setProduct(emptyProduct);
         }
         setSubmitted(true);
     };
+    console.log(alternativeNames)
 
     const editProduct = (product) => {
         let a = {"x": 12}
         a.b = null
-        console.log(a)
         setProduct({ ...product });
         setProductDialog(true);
     };
@@ -261,7 +266,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                         Alternative name
                     </label>
                     <InputText id="alternativeName" value={product.alternativeName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && !product.alternativeName })} />
-                    {submitted && productDialog && !product.alternativeName && <small className="p-error">Alternative name is required.</small>}
+                    {submitted && productDialog && (!product.alternativeName && <small className="p-error">Alternative name is required.</small> || alternativeNames.has(product.alternativeName) && <small className="p-error">Alternative name already exists!</small>)}
                 </div>
                 
                 {criteriaCards.map((card, i) => {
