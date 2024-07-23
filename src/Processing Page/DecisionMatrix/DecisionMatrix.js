@@ -39,8 +39,11 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
     const [selectedProducts, setSelectedProducts] = useState(null);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState(null);
+
     const toast = useRef(null);
     const dt = useRef(null);
+
+
 
     
    
@@ -70,14 +73,15 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         product.alternativeName = product.alternativeName.trim()
         let blankExists = product.alternativeName === "" || alternativeNames.has(product.alternativeName)
         
+        console.log(product)
         
         //check if categorical variables are empty
         if(!blankExists)
             for(let i = 0; i < n; i++) {
                 let card = criteriaCards[i];
                 if(card.dataType === "Categorical") 
-                    product[card.criteriaName] = product[card.criteriaName].trim()
-                if(product[card.criteriaName] === "") {
+                    product[card.criteriaName] = product[card.criteriaName]
+                if(!product[card.criteriaName]) {
                     blankExists = true;
                     break;
                 }
@@ -105,11 +109,11 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         }
         setSubmitted(true);
     };
-    console.log(alternativeNames)
 
     const editProduct = (product) => {
-        let a = {"x": 12}
-        a.b = null
+        alternativeNames.delete(product.alternativeName)
+        setAlternativeNames(alternativeNames)
+
         setProduct({ ...product });
         setProductDialog(true);
     };
@@ -206,7 +210,6 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
     };
 
 
-
     const actionBodyTemplate = (rowData) => {
         return (
             <React.Fragment>
@@ -269,7 +272,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                     <label htmlFor="alternativeName" className="font-bold">
                         Alternative name
                     </label>
-                    <InputText id="alternativeName" value={product.alternativeName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && !product.alternativeName })} />
+                    <InputText id="alternativeName" value={product.alternativeName} onChange={(e) => onInputChange(e, "alternativeName")} required autoFocus className={classNames({ 'p-invalid': submitted && (!product.alternativeName || alternativeNames.has(product.alternativeName)) })} />
                     {submitted && productDialog && (!product.alternativeName && <small className="p-error">Alternative name is required.</small> || alternativeNames.has(product.alternativeName) && <small className="p-error">Alternative name already exists!</small>)}
                 </div>
                 
@@ -280,8 +283,8 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <InputNumber id={i} min={1} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus className={classNames({ 'p-invalid': submitted && product[card.criteriaName] === "" })}/>
-                            {submitted && productDialog && product[card.criteriaName] === "" && <small className="p-error">{card.criteriaName} is required.</small>}
+                            <InputNumber id={i} min={1} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} required autoFocus className={classNames({ 'p-invalid': submitted && !product[card.criteriaName]})}/>
+                            {submitted && productDialog && !product[card.criteriaName] && <small className="p-error">{card.criteriaName} is required.</small>}
                         </div>
                     ):
                     (
@@ -290,8 +293,8 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={Object.keys(card.categories).map((category) => (category))} optionLabel="name" className={classNames({ 'p-invalid': submitted && product[card.criteriaName] === "" })} />
-                            {submitted && productDialog && product[card.criteriaName] === "" && <small className="p-error">{card.criteriaName} is required.</small>}
+                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={Object.keys(card.categories)} optionLabel="name" className={classNames({ 'p-invalid': submitted && !product[card.criteriaName] })} />
+                            {submitted && productDialog && !product[card.criteriaName] && <small className="p-error">{card.criteriaName} is required.</small>}
                         </div>
                     )
                 })}
@@ -334,6 +337,6 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
 
     alternative name already exists: 
       - for edit, it should not check it  -> simply define use state edit, when edit button clicked, set it true, in save product, if it is true, make it false
-      - in edit, if you change the alternative name, delete the old one from set and add the new one
+      - in edit, if you change the alternative name, delete the old one from set and add the new one    
 */
 

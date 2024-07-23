@@ -17,7 +17,6 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
   const handleSubmit = (e) => {
     e.preventDefault();
     criteriaName = criteriaName.trim();
-    console.log("ccc bozkürt: ", criteriaNames)
 
     let _validInputs = {};
     _validInputs.validCriteriaName = criteriaName !== ''
