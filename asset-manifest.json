@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/Optimal-Decision-Maker-App/static/css/main.7b48ede8.css",
-    "main.js": "/Optimal-Decision-Maker-App/static/js/main.72b23dd5.js",
-    "static/media/primeicons.svg": "/Optimal-Decision-Maker-App/static/media/primeicons.6ed59f962963a4a73af2.svg",
-    "static/media/primeicons.eot": "/Optimal-Decision-Maker-App/static/media/primeicons.ff0c4cd79b2ffca2de54.eot",
-    "static/media/primeicons.woff": "/Optimal-Decision-Maker-App/static/media/primeicons.8931fda1930c3bd21e96.woff",
-    "static/media/primeicons.ttf": "/Optimal-Decision-Maker-App/static/media/primeicons.a5c2a53d1ff7a9ff5933.ttf",
-    "static/media/primeicons.woff2": "/Optimal-Decision-Maker-App/static/media/primeicons.024b32cc7bf399b1a847.woff2",
-    "index.html": "/Optimal-Decision-Maker-App/index.html",
-    "main.7b48ede8.css.map": "/Optimal-Decision-Maker-App/static/css/main.7b48ede8.css.map",
-    "main.72b23dd5.js.map": "/Optimal-Decision-Maker-App/static/js/main.72b23dd5.js.map"
+    "main.css": "/BaMInnovation/Optimal-Decision-Maker-App/static/css/main.b2aa0ec0.css",
+    "main.js": "/BaMInnovation/Optimal-Decision-Maker-App/static/js/main.9a2c24e7.js",
+    "static/media/primeicons.svg": "/BaMInnovation/Optimal-Decision-Maker-App/static/media/primeicons.6ed59f962963a4a73af2.svg",
+    "static/media/primeicons.eot": "/BaMInnovation/Optimal-Decision-Maker-App/static/media/primeicons.ff0c4cd79b2ffca2de54.eot",
+    "static/media/primeicons.woff": "/BaMInnovation/Optimal-Decision-Maker-App/static/media/primeicons.8931fda1930c3bd21e96.woff",
+    "static/media/primeicons.ttf": "/BaMInnovation/Optimal-Decision-Maker-App/static/media/primeicons.a5c2a53d1ff7a9ff5933.ttf",
+    "static/media/primeicons.woff2": "/BaMInnovation/Optimal-Decision-Maker-App/static/media/primeicons.024b32cc7bf399b1a847.woff2",
+    "index.html": "/BaMInnovation/Optimal-Decision-Maker-App/index.html",
+    "main.b2aa0ec0.css.map": "/BaMInnovation/Optimal-Decision-Maker-App/static/css/main.b2aa0ec0.css.map",
+    "main.9a2c24e7.js.map": "/BaMInnovation/Optimal-Decision-Maker-App/static/js/main.9a2c24e7.js.map"
   },
   "entrypoints": [
-    "static/css/main.7b48ede8.css",
-    "static/js/main.72b23dd5.js"
+    "static/css/main.b2aa0ec0.css",
+    "static/js/main.9a2c24e7.js"
   ]
 }
