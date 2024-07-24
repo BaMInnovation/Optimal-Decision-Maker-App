@@ -67,13 +67,13 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
         setDeleteProductsDialog(false);
     };
 
+
     const saveProduct = () => {
 
         let n = criteriaCards.length;
         product.alternativeName = product.alternativeName.trim()
         let blankExists = product.alternativeName === "" || alternativeNames.has(product.alternativeName)
         
-        console.log(product)
         
         //check if categorical variables are empty
         if(!blankExists)
@@ -293,7 +293,7 @@ export default function DecisionMatrix({criteriaCards, products, setProducts}) {
                             <label htmlFor={i} className="font-bold">
                                 {card.criteriaName}
                             </label>
-                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={Object.keys(card.categories)} optionLabel="name" className={classNames({ 'p-invalid': submitted && !product[card.criteriaName] })} />
+                            <Dropdown id={i} value={product[card.criteriaName]} onChange={(e) => onInputChange(e, card.criteriaName)} options={card.categories.map(category => category.categoryName)} optionLabel="name" className={classNames({ 'p-invalid': submitted && !product[card.criteriaName] })} />
                             {submitted && productDialog && !product[card.criteriaName] && <small className="p-error">{card.criteriaName} is required.</small>}
                         </div>
                     )

@@ -16,9 +16,11 @@ function Submission({products, criteriaCards}) {
     for(let i = 0; i < n; i++) {
       for(let j = 0; j < m; j++) {
         let criteriaCard = criteriaCards[j]
-        decisionMatrix[i][j] = (criteriaCard.dataType === 'Numerical')? products[i][criteriaCard.criteriaName]: criteriaCard.categories[products[i][criteriaCard.criteriaName]];
+        decisionMatrix[i][j] = (criteriaCard.dataType === 'Numerical')? products[i][criteriaCard.criteriaName]: criteriaCard.categories.find(category => category.categoryName === products[i][criteriaCard.criteriaName]).categoryPoint;
       }
     }
+
+  
 
     //isBeneficial array
     const isBeneficial = criteriaCards.map((card) => card.characteristic === "Beneficial")
@@ -50,6 +52,7 @@ function Submission({products, criteriaCards}) {
       setSubmitted(true)
       if(criteriaCards.length !== 0) {
         let inputs = prepareForCalculation();
+
         let saw = new SAW();
         const result = saw.calculate(inputs.decisionMatrix, inputs.criteriaPoints, inputs.isBeneficial, "NthRoot");
         setResults(result)
@@ -63,10 +66,10 @@ function Submission({products, criteriaCards}) {
       <div className="Submission" style={{backgroundColor: "purple", marginTop: "20px"}}>
 
         {submitted && 
-        (criteriaCards.length && results.map((result, index) => {return (<div key={index} className='results' style={{backgroundColor: "pink"}}>
+        (criteriaCards.length && products.length && results.map((result, index) => {return (<div key={index} className='results' style={{backgroundColor: "pink"}}>
                                             <p>{products[index].alternativeName}: {result}</p>
                                           </div>)}) 
-      || <h1 style={{color:"red"}}>First add some criterias</h1>) }
+      || (!products.length && <h1 style={{color:"red"}}>First add some alternatives</h1> || !criteriaCards.length && <h1 style={{color:"red"}}>First add some criterias</h1>)) }
 
       </div>
     </>

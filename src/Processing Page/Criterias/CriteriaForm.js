@@ -6,10 +6,13 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
   const [dataType, setDataType] = useState('Numerical');
   const [characteristic, setCharacteristic] = useState('Beneficial');
   const [criteriaPoint, setCriteriaPoint] = useState(1);
-  const [categories, setCategories] = useState({ '': '' });
+  const [categories, setCategories] = useState([]);
 
 
-  const [validInputs, setValidInputs] = useState({ validCriteriaName: true, criteriaNameDoesntExist: true/*, validCategoryInputs: true*/ });
+  const [formSubmitted, setFormSubmitted] = useState(false);
+
+
+  const [validInputs, setValidInputs] = useState({ validCriteriaName: true, criteriaNameDoesntExist: true, validCategories: true});
 
 
 
@@ -18,13 +21,24 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
     e.preventDefault();
     criteriaName = criteriaName.trim();
 
+    setFormSubmitted(true);
+
     let _validInputs = {};
     _validInputs.validCriteriaName = criteriaName !== ''
     _validInputs.criteriaNameDoesntExist = !criteriaNames.has(criteriaName)
-    //_validInputs.validCategoryInputs = criteriaName === ''
+    _validInputs.validCategories = true;
+    console.log(categories)
+    for(let i = 0; i < categories.length; i++) 
+      if(categories[i].categoryName === "" || categories[i].categoryPoint === "") {
+        _validInputs.validCategories = false;
+
+        alert("Category name or category point cant be blank")
+        break;
+      }
+    
     setValidInputs(_validInputs );
 
-    if(_validInputs.validCriteriaName && _validInputs.criteriaNameDoesntExist) {
+    if(_validInputs.validCriteriaName && _validInputs.criteriaNameDoesntExist && _validInputs.validCategories) {
       const formData = {
         criteriaName,
         dataType,
@@ -45,7 +59,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
       setDataType('Numerical');
       setCharacteristic('Beneficial');
       setCriteriaPoint(1);
-      setCategories({ '': '' });
+      setCategories([]);
 
       criteriaNames.add(criteriaName)
       setCriteriaNames(criteriaNames);
@@ -59,17 +73,24 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
     setDataType('Numerical');
     setCharacteristic('Beneficial');
     setCriteriaPoint(1);
-    setCategories({ '': '' });
+    setCategories([]);
 
-    setValidInputs({validCriteriaName: true, criteriaNameDoesntExist: true});
+    setFormSubmitted(false);
+    setValidInputs({validCriteriaName: true, criteriaNameDoesntExist: true, validCategories: true});
   };
 
   const handleAddCategory = () => {
-    setCategories({ ...categories, '': '' });
+    setCategories([ ...categories, {"categoryName": "", "categoryPoint": ""} ]);
   };
 
   const handleCategoryChange = (index, field, value) => {
-    let _categories = { ...categories };
+    let _categories = [...categories];
+    if (field === 'categoryName') _categories[index].categoryName = value
+    else if(field === 'categoryPoint') _categories[index].categoryPoint = value
+      
+    setCategories(_categories);
+
+/*
     const keys = Object.keys(_categories);
     if (field === 'categoryName') {
       const oldKey = keys[index];
@@ -80,20 +101,20 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
       const key = keys[index];
       _categories[key] = parseInt(value);
     }
-  
-    setCategories(_categories);
+*/
   };
 
-  const handleRemoveCategory = (category) => {
-    let _categories = {...categories};
-    delete _categories[category];
+  const handleRemoveCategory = (index) => {
+    let _categories = [...categories];
+
+    _categories.splice(index, 1);
+//    delete _categories[category];
     setCategories(_categories);
  };
 
 
   useEffect(() => {
     if(editCard) {
-      console.log("kürdp: ", editCard.cardData.criteriaName);
       criteriaNames.delete(editCard.cardData.criteriaName)
       setCriteriaNames(criteriaNames);
 
@@ -156,22 +177,24 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(categories).map((category, index) => (
+                  {categories.map((category, index) => (
                     <tr key={index}>
                       <td>
                         <input
+                          style={formSubmitted && (!category.categoryName || category.categoryName === "") ? { border: "3px solid red" } : {}}
                           type="text"
                           className="form-control"
-                          value={category}
+                          value={category.categoryName}
                           onChange={(e) => handleCategoryChange(index, 'categoryName', e.target.value)}
                           required
                         />
                       </td>
                       <td>
                         <input
+                          style={formSubmitted && (!category.categoryPoint || category.categoryPoint === "") ? { border: "3px solid red" } : {}}
                           type="number"
                           className="form-control"
-                          value={categories[category]}
+                          value={category.categoryPoint}
                           onChange={(e) => handleCategoryChange(index, 'categoryPoint', e.target.value)}
                           required
                         />
@@ -180,7 +203,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
                         <button
                           type="button"
                           className="btn btn-danger btn-sm"
-                          onClick={() => handleRemoveCategory(category)}
+                          onClick={() => handleRemoveCategory(index)}
                         >
                           Delete
                         </button>
@@ -249,7 +272,7 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
           
           <div className="row mt-5">
             <div className="col text-start">
-              <button type="submit" className="btn btn-primary" style={{width:"120px", height:"50px"}}  onClick={handleSubmit}>Submit</button>
+              <button type="submit" className="btn btn-success" style={{width:"120px", height:"50px"}}  onClick={handleSubmit}>Submit</button>
             </div>
             <div className="col text-end">
               <button type="button" className="btn btn-secondary" style={{width:"120px", height:"50px"}} onClick={handleCancelForm}>Cancel</button>
@@ -264,37 +287,3 @@ function CriteriaForm({ criteriaCards, setCriteriaCards, editCard, setEditCard, 
 export default CriteriaForm;
 
 
-/*
-
-categories.map((category, index) => (
-                    <tr key={index}>
-                      <td>
-                        <input
-                          type="text"
-                          className="form-control"
-                          value={category.categoryName}
-                          onChange={(e) => handleCategoryChange(index, 'categoryName', e.target.value)}
-                          required
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="number"
-                          className="form-control"
-                          value={category.categoryPoint}
-                          onChange={(e) => handleCategoryChange(index, 'categoryPoint', e.target.value)}
-                          required
-                        />
-                      </td>
-                      <td>
-                        <button
-                          type="button"
-                          className="btn btn-danger btn-sm"
-                          onClick={() => handleRemoveCategory(index)}
-                        >
-                          Delete
-                        </button>
-                      </td>
-                    </tr>
-                  ))
-*/

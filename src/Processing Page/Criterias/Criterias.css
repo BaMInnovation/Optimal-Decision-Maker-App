@@ -4,7 +4,7 @@
 .cards-container {
     display: flex;
     gap: 1rem;
-    background-color: red;
+    background-color: rgb(255, 0, 179);
     padding: 3%;
     z-index: 1; /* Ensure cards are at a lower z-index */
   }
@@ -28,7 +28,7 @@
   /* Form */
   #criteria-form {
     width: 50%;
-    background-color: rgb(233, 229, 232);
+    background-color: rgb(232, 233, 229);
     border-radius: 3%;
     padding: 50px;
     z-index: 4; /* Ensure cards are at a lower z-index */
